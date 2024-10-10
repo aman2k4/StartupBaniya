@@ -1,2 +1,32 @@
 .env
 *.mp4
+*.srt
+
+# compiled files
+*.pyc
+*.pyo
+*.pyd
+*.pyz
+*.pyw
+*.pywz
+*.pywz
+
+# audio files
+*.mp3
+*.wav
+*.ogg
+*.flac
+*.m4a
+*.aac
+*.wma
+*.aiff
+
+# video files
+*.mp4
+*.mov
+*.avi
+*.mkv
+*.wmv
+*.flv
+*.webm
+*.m4v

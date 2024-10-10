@@ -18,7 +18,6 @@ venv/
 
 
 # some folders i dont want to push
-manim/
 flux/
 aws/
 claude/
