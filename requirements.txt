@@ -1,1 +1,4 @@
 manim
+replicate
+python-dotenv
+crawl4ai
