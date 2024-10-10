@@ -12,3 +12,13 @@ venv/
 *.srt
 *.txt
 
+# .DS_Store
+.DS_Store
+
+
+
+# some folders i dont want to push
+manim/
+flux/
+aws/
+claude/
