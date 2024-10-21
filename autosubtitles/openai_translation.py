@@ -9,13 +9,13 @@ load_dotenv()
 client = OpenAI(api_key=os.getenv('OPENAI_API_KEY'))
 
 def translate_audio(file_path: str, translation_file: str) -> str:
-    print("Translating audio to English...")
+    print(f"Translating audio to English: {file_path}")
     with open(file_path, 'rb') as audio_file:
         translation = client.audio.translations.create(
             model="whisper-1", 
             file=audio_file
         )
-    print("Audio translated.")
+    print(f"Audio translated. Saving to: {translation_file}")
     # save it in a txt file 
     with open(translation_file, "w") as file:
         file.write(translation.text)

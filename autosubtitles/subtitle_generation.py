@@ -1,45 +1,78 @@
 import srt
 import datetime
+import json
 from typing import List
+from openai import OpenAI
+from pydantic import BaseModel, Field
 
-def split_text_into_subtitles(max_words_per_line: int, max_lines: int) -> List[str]:
-    with open("translated_audio.txt", "r") as file:
+class ProcessedText(BaseModel):
+    sentences: List[str] = Field(..., description="An array of corrected and split sentences from the input text")
+
+def process_text_with_llm(text: str) -> List[str]:
+    client = OpenAI()
+    
+    completion = client.beta.chat.completions.parse(
+        model="gpt-4o",  # Update this to the latest available model
+        messages=[
+            {
+                "role": "system",
+                "content": "You are an expert in making subtitles for videos which are in mix of hindi and english language. Your task is to correct the grammar and tonality of the given text, and split it into individual sentences. Each sentence should be grammatically correct and maintain the original meaning and tone of the video. You are not allowed to use any puntuation such as , ; : etc. Also no full stop at the end of the sentence."
+            },
+            {
+                "role": "user",
+                "content": text
+            }
+        ],
+        temperature=0.0,
+        response_format=ProcessedText,
+    )
+
+    processed_text = completion.choices[0].message.parsed
+    return processed_text.sentences
+
+def create_subtitles(translated_text_path: str, srt_path: str, max_words_per_line: int, max_lines: int, video_duration: float) -> List[srt.Subtitle]:
+    # Read the translated text
+    with open(translated_text_path, "r") as file:
         text = file.read()
-
-    words = text.split()
-    subtitles = []
-    current_subtitle = []
-    current_line = []
-
-    for word in words:
-        if len(current_line) >= max_words_per_line:
-            current_subtitle.append(' '.join(current_line))
-            current_line = []
-        
-        current_line.append(word)
-        
-        if len(current_subtitle) >= max_lines:
-            subtitles.append('\n'.join(current_subtitle))
-            current_subtitle = []
-
-    # Add any remaining lines to the current subtitle
-    if current_line:
-        current_subtitle.append(' '.join(current_line))
     
-    # Add any remaining subtitle to the list
-    if current_subtitle:
-        subtitles.append('\n'.join(current_subtitle))
-
-    # save the subtitle parts in a txt file 
-    with open("subtitle_parts.txt", "w") as file:
-        file.write(str(subtitles))
-
-    return subtitles
-
-def create_subtitles(max_words_per_line: int, max_lines: int, video_duration: float) -> List[srt.Subtitle]:
-    # First, split the text into subtitle parts
-    subtitle_parts = split_text_into_subtitles(max_words_per_line, max_lines)
+    # Process the text with LLM
+    processed_sentences = process_text_with_llm(text)
     
+    # Save processed sentences to a file
+    processed_sentences_path = srt_path.replace('.srt', '_processed.json')
+    with open(processed_sentences_path, "w") as file:
+        json.dump({"sentences": processed_sentences}, file, indent=2)
+    
+    # Create subtitle parts from processed sentences
+    subtitle_parts = []
+    current_part = []
+    current_line_count = 0
+    
+    for sentence in processed_sentences:
+        words = sentence.split()
+        current_line = []
+        
+        for word in words:
+            if len(current_line) >= max_words_per_line:
+                current_part.append(' '.join(current_line))
+                current_line = []
+                current_line_count += 1
+            
+            current_line.append(word)
+            
+            if current_line_count >= max_lines:
+                subtitle_parts.append('\n'.join(current_part))
+                current_part = []
+                current_line_count = 0
+        
+        if current_line:
+            current_part.append(' '.join(current_line))
+            current_line_count += 1
+    
+    if current_part:
+        subtitle_parts.append('\n'.join(current_part))
+    
+    # Create SRT subtitles
     subtitles = []
     time_per_subtitle = video_duration / len(subtitle_parts)
     
@@ -48,8 +81,10 @@ def create_subtitles(max_words_per_line: int, max_lines: int, video_duration: fl
         end = datetime.timedelta(seconds=(i + 1) * time_per_subtitle)
         subtitles.append(srt.Subtitle(index=i+1, start=start, end=end, content=part))
     
-    # save it in a srt file 
-    with open("subtitles.srt", "w") as file:
+    # Save subtitles to SRT file
+    with open(srt_path, "w") as file:
         file.write(srt.compose(subtitles))
     
     return subtitles
+
+# Remove or comment out the split_text_into_subtitles function as it's no longer needed

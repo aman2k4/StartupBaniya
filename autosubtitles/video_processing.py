@@ -46,6 +46,7 @@ def create_subtitle_clip(txt, video_width, video_height):
     return composite
 
 def add_subtitles_to_video(input_video_path: str, output_video_path: str, srt_path: str):
+    print(f"Adding subtitles from {srt_path} to video: {input_video_path}")
     # Load the video
     video = mp.VideoFileClip(input_video_path)
 
