@@ -16,7 +16,7 @@ def process_text_with_llm(text: str) -> List[str]:
         messages=[
             {
                 "role": "system",
-                "content": "You are an expert in making subtitles for videos which are in mix of hindi and english language. Your task is to correct the grammar and tonality of the given text, and split it into individual sentences. Each sentence should be grammatically correct and maintain the original meaning and tone of the video. You are not allowed to use any puntuation such as , ; : etc. Also no full stop at the end of the sentence."
+                "content": "You are an expert in creating subtitles for videos in a mix of Hindi and English. Your task is to correct the grammar and improve the tonality of the provided text, splitting it into clear and concise sentences. Each sentence should be easy to read, grammatically correct, and maintain the original meaning and tone of the video. Avoid using full stops at the end of sentences."
             },
             {
                 "role": "user",

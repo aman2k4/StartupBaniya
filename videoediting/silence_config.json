@@ -1,0 +1,4 @@
+{
+    "silence_thresh": -40,
+    "min_silence_len": 500
+  }

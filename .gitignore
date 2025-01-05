@@ -1,6 +1,9 @@
 # virtual environment
 venv/
 
+# *.pyc
+*.pyc
+
 # environment variables
 .env
 
@@ -21,3 +24,6 @@ venv/
 flux/
 aws/
 claude/
+videoediing
+.codegpt
+factchecker/

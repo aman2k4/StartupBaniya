@@ -2,6 +2,9 @@
 *.mp4
 *.srt
 
+#  json files
+*.json
+
 # compiled files
 *.pyc
 *.pyo

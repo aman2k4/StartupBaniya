@@ -44,4 +44,13 @@ def process_video(input_video_path: str, output_video_path: str, max_words_per_l
 
 # Example usage
 if __name__ == "__main__":
-    process_video("Day 6.mp4", "Day_6_subtitles.mp4", max_words_per_line=4, max_lines=1)
+    process_video("day_10.mp4", "day_10_subtitles.mp4", max_words_per_line=4, max_lines=1)
+    process_video("day_11.mp4", "day_11_subtitles.mp4", max_words_per_line=4, max_lines=1)
+    process_video("day_12.mp4", "day_12_subtitles.mp4", max_words_per_line=4, max_lines=1)
+    process_video("day_13.mp4", "day_13_subtitles.mp4", max_words_per_line=4, max_lines=1)
+    # process_video("day_14.mp4", "day_14_subtitles.mp4", max_words_per_line=4, max_lines=1)
+    process_video("day_15.mp4", "day_15_subtitles.mp4", max_words_per_line=4, max_lines=1)
+    process_video("day_16.mp4", "day_16_subtitles.mp4", max_words_per_line=4, max_lines=1)
+    process_video("day_17.mp4", "day_17_subtitles.mp4", max_words_per_line=4, max_lines=1)
+    process_video("day_18.mp4", "day_18_subtitles.mp4", max_words_per_line=4, max_lines=1)
+    process_video("day_19.mp4", "day_19_subtitles.mp4", max_words_per_line=4, max_lines=1)
